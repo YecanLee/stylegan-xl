@@ -119,6 +119,12 @@ python gen_class_samplesheet.py --outdir=sample_sheets --trunc=1.0 \
   --samples-per-class 4 --classes 0-32 --grid-width 32
 ```
 
+To generate a conditional sample folder with different classes in different subfolders, run
+```
+python gen_indepenet_images.py --outdir=/personal_storage/scout/fid-flaws/data/gen_img_stylegan --trunc=1.0 --network=https://s3.eu-central-1.am
+azonaws.com/avg-projects/stylegan_xl/models/imagenet256.pkl --class-samples NUM_SAMPLES_PER_CLASS_TO_GENERATE.json --imagenet-classes PATH/TO/IMAGENET_LABELS.json --batch-gpu 32
+```
+
 For ImageNet models, we enable multi-modal truncation (proposed by [Self-Distilled
 GAN](https://self-distilled-stylegan.github.io/)). We generated 600k find 10k cluster centroids via k-means. For a given samples, multi-modal truncation finds the closest centroids and interpolates towards it. To switch from uni-model to multi-modal truncation, pass
 
