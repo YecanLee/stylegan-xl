@@ -13,18 +13,17 @@ from PIL import Image
 @click.command()
 @click.option('--network', 'network_pkl', help='Network pickle filename', required=True)
 @click.option('--trunc', 'truncation_psi', help='Truncation psi', type=float, default=1, show_default=True)
-@click.option('--seed', help='Random seed', type=int, default=42)
+@click.option('--seed', help='Random seed', type=int, default=1000)
 @click.option('--centroids-path', type=str, help='Pass path to precomputed centroids to enable multimodal truncation')
-@click.option('--class-samples', type=str, help='Path to JSON file containing the number of samples per class', required=True)
 @click.option('--batch-gpu', help='Samples per pass, adapt to fit on GPU', type=int, default=32)
 @click.option('--outdir', help='Where to save the output images', type=str, required=True, metavar='DIR')
 @click.option('--imagenet-classes', type=str, help='Path to JSON file containing the ImageNet class index', required=True)
+
 def generate_samples(
     network_pkl: str,
     truncation_psi: float,
     seed: int,
     centroids_path: str,
-    class_samples: str,
     batch_gpu: int,
     outdir: str,
     imagenet_classes: str,
@@ -32,10 +31,6 @@ def generate_samples(
     device = torch.device('cuda')
     with dnnlib.util.open_url(network_pkl) as f:
         G = legacy.load_network_pkl(f)['G_ema'].to(device).eval()
-
-    # Load class samples from JSON file
-    with open(class_samples, 'r') as f:
-        class_samples_dict = json.load(f)
 
     # Load ImageNet class index from JSON file
     with open(imagenet_classes, 'r') as f:
@@ -45,7 +40,7 @@ def generate_samples(
 
     for class_idx, class_info in imagenet_classes_dict.items():
         class_id, class_name = class_info
-        num_samples = class_samples_dict.get(class_id, 0)
+        num_samples = 50
         if num_samples == 0:
             continue
 
