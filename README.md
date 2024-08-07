@@ -119,10 +119,13 @@ python gen_class_samplesheet.py --outdir=sample_sheets --trunc=1.0 \
   --samples-per-class 4 --classes 0-32 --grid-width 32
 ```
 
-To generate a conditional sample folder with different classes in different subfolders, run
-```
-python gen_indepenet_images.py --outdir=/personal_storage/scout/fid-flaws/data/gen_img_stylegan --trunc=1.0 --network=https://s3.eu-central-1.am
-azonaws.com/avg-projects/stylegan_xl/models/imagenet256.pkl --class-samples NUM_SAMPLES_PER_CLASS_TO_GENERATE.json --imagenet-classes PATH/TO/IMAGENET_LABELS.json --batch-gpu 32
+To generate a conditional sample folder with 50k images/50 images for each class, run the following commands:
+```shell
+python generation_single_gpu.py --outdir=samplesheet --trunc=1.0 \
+--network=https://s3.eu-central-1.amazonaws.com/avg-projects/stylegan_xl/models/imagenet256.pkl \
+--num-classes 1000 \
+--num-samples-per-class 50 \
+--batch-size 32
 ```
 
 For ImageNet models, we enable multi-modal truncation (proposed by [Self-Distilled
